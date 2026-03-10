@@ -1,0 +1,110 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "speechpulse"
+version = "0.1.0"
+description = "SpeechPulse - Voice emotion understanding MCP Server based on Qwen2-Audio"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "SpeechPulse Team"},
+]
+keywords = ["mcp", "speech", "emotion", "audio", "voice", "qwen"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Multimedia :: Sound/Audio :: Analysis",
+]
+
+# Core dependencies - zero ML dependencies for Lite tier
+dependencies = [
+    "mcp>=1.0",
+]
+
+[project.optional-dependencies]
+# Standard tier dependencies
+standard = [
+    "torch>=2.0.0",
+    "librosa>=0.10.0",
+    "funasr>=1.0.0",
+    "openai-whisper>=20231117",
+]
+# Pro tier dependencies
+pro = [
+    "torch>=2.0.0",
+    "transformers>=4.35.0",
+    "dashscope>=1.14.0",
+    "bitsandbytes>=0.41.0",
+]
+# All tiers
+all = [
+    "torch>=2.0.0",
+    "librosa>=0.10.0",
+    "funasr>=1.0.0",
+    "openai-whisper>=20231117",
+    "transformers>=4.35.0",
+    "dashscope>=1.14.0",
+    "bitsandbytes>=0.41.0",
+]
+# Development dependencies
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+    "build>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/speechpulse/speechpulse"
+Documentation = "https://github.com/speechpulse/speechpulse#readme"
+Repository = "https://github.com/speechpulse/speechpulse"
+Issues = "https://github.com/speechpulse/speechpulse/issues"
+
+[project.scripts]
+speechpulse = "speechpulse.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/speechpulse"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/tests",
+    "/examples",
+    "/skills",
+    "/README.md",
+    "/LICENSE",
+]
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
