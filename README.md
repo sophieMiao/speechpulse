@@ -10,7 +10,7 @@ SpeechPulse analyzes speech audio to detect emotions, assess urgency, and detect
 
 ## Features
 
-- **Emotion Detection**: Recognizes 7 emotions (happy, excited, angry, sad, tired, anxious, neutral) using z-score relative thresholds
+- **Emotion Detection**: Recognizes 7 emotions (happy, excited, angry, sad, tired, anxious, neutral) using coefficient of variation (CV) thresholds
 - **Urgency Assessment**: 4-level urgency detection (low, medium, high, critical) based on speaking patterns
 - **Sarcasm Detection**: Identifies sarcasm by comparing text sentiment with audio emotion
 - **Zero ML Dependencies**: Lite tier uses pure Python standard library (no numpy/scipy/librosa)
@@ -27,7 +27,7 @@ pip install speechpulse
 ### From Source
 
 ```bash
-git clone https://github.com/yourusername/speechpulse.git
+git clone https://github.com/sophieMiao/speechpulse.git
 cd speechpulse
 pip install -e ".[dev]"
 ```
@@ -150,7 +150,7 @@ speechpulse/
 ├── config.py          # Configuration management
 ├── utils.py           # Audio loading and processing utilities
 ├── audio_features.py  # Feature extraction (pitch, energy, etc.)
-├── emotion.py         # Z-score based emotion rule engine
+├── emotion.py         # CV-based emotion rule engine
 ├── urgency.py         # Urgency assessment logic
 ├── sarcasm.py         # Sarcasm detection
 ├── analyzer.py        # Main analysis pipeline
@@ -177,15 +177,15 @@ speechpulse/
 
 ### Emotion Recognition
 
-Uses z-score relative thresholds to avoid gender bias:
+Uses coefficient of variation (CV = std/mean) to avoid gender bias while maintaining discriminative power:
 
 ```python
-# Example: Happy emotion rule
+# Example: Happy emotion rule (using coefficient of variation)
 "happy": {
     "conditions": [
-        ("pitch_zscore", ">", 1.0),      # Pitch above mean + 1σ
-        ("energy_zscore", ">", 0.5),     # Energy above mean + 0.5σ
-        ("pitch_std_zscore", ">", 0.8),  # High pitch variation
+        ("pitch_cv", ">", 0.15),       # High pitch variation (lively)
+        ("energy_mean", ">", 0.3),      # Moderate-high energy
+        ("energy_cv", ">", 0.2),        # Energy fluctuation
     ],
     "weight": 0.8,
 }
@@ -230,7 +230,7 @@ Based on 5 factors:
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/speechpulse.git
+git clone https://github.com/sophieMiao/speechpulse.git
 cd speechpulse
 
 # Create virtual environment
@@ -295,12 +295,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Built with [MCP SDK](https://github.com/modelcontextprotocol/python-sdk)
 - Inspired by prosodic analysis research in speech emotion recognition
-- Z-score approach based on gender-fair emotion recognition research
+- CV approach based on gender-fair emotion recognition research
 
 ## Support
 
-- GitHub Issues: [https://github.com/yourusername/speechpulse/issues](https://github.com/yourusername/speechpulse/issues)
-- Documentation: [https://speechpulse.readthedocs.io](https://speechpulse.readthedocs.io)
+- GitHub Issues: [https://github.com/sophieMiao/speechpulse/issues](https://github.com/sophieMiao/speechpulse/issues)
 
 ---
 
